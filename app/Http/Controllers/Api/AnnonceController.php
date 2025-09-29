@@ -20,6 +20,36 @@ class AnnonceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
+    public function chercherAnnonceParTitre(Request $request)
+{
+    $titre = trim($request->input('titre'));
+
+    if (!$titre) {
+        return response()->json([
+            'message' => 'Veuillez fournir un titre à rechercher.'
+        ], 422);
+    }
+
+    $annonces = Annonce::whereRaw('LOWER(titre) LIKE ?', ['%' . strtolower($titre) . '%'])
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+    return response()->json($annonces);
+}
+
+
+
+
+   public function triAnnoncesParDate()
+   {
+    // Récupère toutes les annonces triées par date de création descendante
+    $annonces = Annonce::orderBy('created_at', 'desc')->get();
+
+    return response()->json($annonces);
+    }
+
+
     public function create()
     {
         //
@@ -106,14 +136,14 @@ class AnnonceController extends Controller
             }
 
           if($request->hasFile('image')){
-          $data['image']=$request->file('image')->store('pictures','public');
+          $validated['image']=$request->file('image')->store('pictures','public');
          }
          if ($request->hasFile('galerie')) {
             $paths = [];
                foreach ($request->file('galerie') as $file) {
                   $paths[] = $file->store('pictures', 'public');
         }
-         $data['galerie'] = json_encode($paths);
+         $validated['galerie'] = json_encode($paths);
         }
 
     // Vérifier que l'utilisateur est le propriétaire (optionnel mais recommandé)

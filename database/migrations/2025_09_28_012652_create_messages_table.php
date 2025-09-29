@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('annonce_id')->constrained()->onDelete('cascade');
+            $table->text('contenu');
+            $table->string('image')->nullable(); // image principale
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -24,14 +24,31 @@ class CategorieController extends Controller
     return response()->json($categories);
   }
 
-    public function triAnnoncesParDate()
-   {
-    $categories = Categorie::with(['annonces' => function ($query) {
-        $query->orderBy('created_at', 'desc'); // "desc" = plus récentes d'abord
-    }])->get();
 
-    return response()->json($categories);
-  }
+//    public function triAnnoncesParDate(Request $request)
+//   {
+//     $categorieId = $request->input('categorie_id');
+
+//     if (!$categorieId) {
+//         return response()->json([
+//             'message' => 'Veuillez fournir l\'ID de la catégorie.'
+//         ], 422);
+//     }
+
+//     $categorie = Categorie::with(['annonces' => function ($query) {
+//         $query->orderBy('created_at', 'desc');
+//     }])->find($categorieId);
+
+//     if (!$categorie) {
+//         return response()->json([
+//             'message' => 'Catégorie non trouvée.'
+//         ], 404);
+//     }
+
+//     return response()->json($categorie);
+// }
+
+
 
 
     /**
